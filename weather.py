@@ -16,3 +16,11 @@ def get_key():
     else:
         print(".env file doesn't found!")
 
+def get_city():
+    city = input("Enter city: ")
+    city = city.strip().lower()
+    if len(city)==0:
+        print("City name must contains chars. ")
+        exit()
+    else:
+        return city
