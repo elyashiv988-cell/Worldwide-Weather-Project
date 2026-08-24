@@ -2,6 +2,7 @@ import csv
 import json
 import os
 import datetime
+import time
 import requests
 import dotenv
 
@@ -46,3 +47,28 @@ def get_us_code(country):
     else:
         print("State code must contains exactly 2 letters. ")
         exit()
+
+def get_location(city_name, country_code, key, state_code=" ", limit=1):
+
+    uml = f"http://api.openweathermap.org/geo/1.0/direct"
+
+    
+    start_time = time.time()
+
+    try:
+        if country_code == "US":
+            state_code = get_us_code()
+            response = requests.get(f"{uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
+        else:
+            response = requests.get(f"{uml}?q={city_name},{country_code}&limit={limit}&appid={key}")
+        corrent_time = time.time()
+        if corrent_time - start_time < 30:
+            coordinates = response.json()
+            return coordinates[0]["lat"], coordinates[0]["lon"]
+
+    except:
+        print("Location not found!")
+        exit()
+
+
+    
