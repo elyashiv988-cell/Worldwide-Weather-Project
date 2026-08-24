@@ -1,15 +1,21 @@
 from weather import *
 
 def main():
-
-    country = get_country_code()
+    
     city = get_city()
+    country = get_country_code()
     key = get_key()
 
-    coordinations = get_location(country, city, key)
-    weather = get_weather(coordinations[0]["lat"],coordinations[0]["lon"], get_key())
-    data = process_weather_data(coordinations,weather)
+    location = get_location(country, city, key)
+    if not location:
+        print("Location not found!")
+        exit()
+    lat = location[0]["lat"]
+    lon = location[0]["lon"]
+    weather = get_weather(lat,lon, key)
+    data = process_weather_data(location, weather)
     print_weather(data)
     save_weather_to_csv(data)
 
 main()
+

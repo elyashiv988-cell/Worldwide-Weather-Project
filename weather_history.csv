@@ -5,3 +5,8 @@ search_time,city,state,country,temperature,feels_like,condition,humidity,wind_sp
 2026-08-24 16:29:20.926942,Lod,Center District,IL,31,34,clear sky,55,5
 2026-08-24 16:30:04.677980,Lod,Center District,IL,31,34,clear sky,55,5
 2026-08-24 16:56:03.721590,Lod,Center District,IL,31,35,clear sky,55,5
+2026-08-24 17:22:07.577893,Lod,Center District,IL,31,35,clear sky,58,4
+2026-08-24 18:14:18.964896,Jerusalem,Jerusalem District,IL,28,29,clear sky,57,4
+2026-08-24 18:15:14.628006,Jerusalem,Jerusalem District,IL,28,29,clear sky,57,4
+2026-08-24 18:23:34.248240,Lod,Center District,IL,29,33,clear sky,64,4
+2026-08-24 18:26:30.128578,Lod,Center District,IL,29,33,clear sky,64,4
