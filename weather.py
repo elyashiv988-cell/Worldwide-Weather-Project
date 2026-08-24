@@ -33,7 +33,7 @@ def get_city():
 def get_country_code():
 
     country = input("Enter country code (For example Israel: IL): ")
-    country = country.lower().strip()
+    country = country.upper().strip()
     if len(country)==2 and country.isalpha():
         return country
     else:
@@ -58,29 +58,49 @@ def get_location(country_code, city_name, key, limit=1):
         state_code = get_us_code()
     else:
         state_code = ""
-    
-    response = requests.get(f"{base_uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
-    coordinates = response.json()
 
-    if len(coordinates)==0:
-        print("Location not found!")
+    try:
+        response = requests.get(f"{base_uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
+        coordinates = response.json()
+    except:
+        print("No internet connection")
         exit()
+
+    if response.status_code == 200:
+        if coordinates:
+            return coordinates
+        else:
+            return None
+
+    elif response.status_code == 401:
+        print("Invalid API key")
     else:
-        return coordinates
+        print(f"{response.status_code} ERROR")
+    exit()   
+    
 
 def get_weather(latitude, longitude, key):
 
     base_uml = "https://api.openweathermap.org/data/2.5/weather"
-    response = requests.get(f"{base_uml}?lat={latitude}&lon={longitude}&units=metric&appid={key}")
-    weather_data= response.json()
+
+    try:
+        response = requests.get(f"{base_uml}?lat={latitude}&lon={longitude}&units=metric&appid={key}")
+        weather_data= response.json()
+        return weather_data
     
-    return weather_data
+    except:
+        print("No internet connection")
+        exit()
+    
 
 def process_weather_data(location, weather):
     data_dict = {}
     data_dict["search_time"] =datetime.datetime.now()
     data_dict["city"] = location[0]["name"]
-    data_dict["state"] = location[0]["state"]
+    try:
+        data_dict["state"] = location[0]["state"]
+    except KeyError:
+        data_dict["state"]= ""
     data_dict["country"] = location[0]["country"]
     data_dict["temperature"] = int(weather["main"]["temp"])
     data_dict["feels_like"] = int(weather["main"]["feels_like"])
@@ -101,33 +121,17 @@ def print_weather(weather_result):
 def save_weather_to_csv(weather_result):
 
     headers=["search_time","city","state", "country", "temperature", "feels_like", "condition", "humidity", "wind_speed"]
+    try:
+        with open("weather_history.csv", "a", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=headers)
+    except:
+        print("The API response did not contain the expected data.")
+        exit()
 
-    with open("weather_history.csv", "a", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=headers)
-
-        if os.path.getsize("weather_history.csv") ==0:
+        if os.path.getsize("weather_history.csv") ==0 and os.path.exists("weather_history.csv"):
             writer.writeheader()
         writer.writerow(weather_result)
         print("Weather result saved to weather_history.csv")
         return True
     
-
-
-
-
-    
-
-
-
-                    
-                    
-                    
-                    
-                    
-                    
-    
-
-
-    
-
-    
+    return False
