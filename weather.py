@@ -48,27 +48,44 @@ def get_us_code(country):
         print("State code must contains exactly 2 letters. ")
         exit()
 
-def get_location(city_name, country_code, key, state_code=" ", limit=1):
+def get_location(country_code, city_name, key, state_code=" ", limit=1):
 
-    uml = f"http://api.openweathermap.org/geo/1.0/direct"
-
+    base_uml = f"http://api.openweathermap.org/geo/1.0/direct"
     
-    start_time = time.time()
-
+    
     try:
+        start_time = time.time()
+
         if country_code == "US":
             state_code = get_us_code()
-            response = requests.get(f"{uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
+            response = requests.get(f"{base_uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
         else:
-            response = requests.get(f"{uml}?q={city_name},{country_code}&limit={limit}&appid={key}")
+            response = requests.get(f"{base_uml}?q={city_name},{country_code}&limit={limit}&appid={key}")
+
         corrent_time = time.time()
+
         if corrent_time - start_time < 30:
             coordinates = response.json()
             return coordinates[0]["lat"], coordinates[0]["lon"]
+        else: 
+            print("TIme over!")
+            exit()
 
     except:
         print("Location not found!")
         exit()
 
+def get_weather(latitude, longitude, key):
+
+    base_uml = "https://api.openweathermap.org/data/2.5/weather"
+    response = requests.get(f"{base_uml}?lat={latitude}&lon={longitude}&appid={key}")
+    weather_data= response.json()
+
+    return weather_data
+
+
+    
+
+    
 
     
