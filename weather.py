@@ -28,12 +28,21 @@ def get_city():
 
 def get_country_code():
 
-    country = input("Enter country code (For example Israel: IL): ")
+    country = input("Enter country code (For example Israel: IL.): ")
     country = country.lower().strip()
     if len(country)==2:
         return country
     else:
         print("Country code must contains exactly 2 letters. ")
         exit()
-        
 
+
+def get_us_code(country):
+    
+    state = input("Enter state code: (For example Texas: TX.) ")
+    state = state.lower().strip()
+    if len(state)==2:
+        return state
+    else:
+        print("State code must contains exactly 2 letters. ")
+        exit()
