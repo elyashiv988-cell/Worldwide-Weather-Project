@@ -1,3 +1,7 @@
 search_time,city,state,country,temperature,feels_like,condition,humidity,wind_speed
 "(datetime.datetime(2026, 8, 24, 16, 20, 39, 505505), 2)",Tel Aviv-Yafo,Tel Aviv District,IL,32,35,clear sky,54,5
 2026-08-24 16:21:56.891324,Lod,Center District,IL,31,35,clear sky,56,5
+2026-08-24 16:28:59.593451,Texas,New Jersey,US,22,23,clear sky,71,3
+2026-08-24 16:29:20.926942,Lod,Center District,IL,31,34,clear sky,55,5
+2026-08-24 16:30:04.677980,Lod,Center District,IL,31,34,clear sky,55,5
+2026-08-24 16:56:03.721590,Lod,Center District,IL,31,35,clear sky,55,5
