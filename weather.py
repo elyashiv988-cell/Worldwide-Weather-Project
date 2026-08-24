@@ -83,12 +83,12 @@ def get_weather(latitude, longitude, key):
     base_uml = "https://api.openweathermap.org/data/2.5/weather"
     response = requests.get(f"{base_uml}?lat={latitude}&lon={longitude}&units=metric&appid={key}")
     weather_data= response.json()
-
+    
     return weather_data
 
 def process_weather_data(location, weather):
     data_dict = {}
-    data_dict["search_time"] = None
+    data_dict["search_time"] =datetime.datetime.now()
     data_dict["city"] = location[0]["name"]
     data_dict["state"] = location[0]["state"]
     data_dict["country"] = location[0]["country"]
@@ -100,27 +100,32 @@ def process_weather_data(location, weather):
     return data_dict
 
 def print_weather(weather_result):
-    print(f"City: {weather_result["city"]}")
+
+    print(f"search_time: {weather_result["search_time"]}\nCity: {weather_result["city"]}")
+
     if weather_result["state"].strip()!="":
         print(f"State: {weather_result["state"]}")
+
     print(f"Country: {weather_result["country"]}\nTemperature: {weather_result["temperature"]}\nFeels like: {weather_result["feels_like"]}\nCondition: {weather_result["condition"]}\nHumidity: {weather_result["humidity"]}\nWind speed: {weather_result["wind_speed"]}")
 
+def save_weather_to_csv(weather_result):
 
-def main():
-    country = get_country_code()
-    if is_usa(country):
-        state = get_us_code()
-    else:
-        state = None
-    city = get_city()
-    key = get_key()
+    headers=["search_time","city","state", "country", "temperature", "feels_like", "condition", "humidity", "wind_speed"]
 
-    coordinations = get_location(country, state, city, key, )
-    weather = get_weather(coordinations[0]["lat"],coordinations[0]["lon"], get_key())
-    print_weather(process_weather_data(coordinations,weather))
+    with open("weather_history.csv", "a", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=headers)
+
+        if os.path.getsize("weather_history.csv") ==0:
+            writer.writeheader()
+        writer.writerow(weather_result)
 
 
-main()
+
+
+    
+
+
+
                     
                     
                     
