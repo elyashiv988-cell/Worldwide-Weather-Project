@@ -6,7 +6,7 @@ def main():
     city = get_city()
     key = get_key()
 
-    coordinations = get_location(country, city, key=key)
+    coordinations = get_location(country, city, key)
     weather = get_weather(coordinations[0]["lat"],coordinations[0]["lon"], get_key())
     data = process_weather_data(coordinations,weather)
     print_weather(data)
