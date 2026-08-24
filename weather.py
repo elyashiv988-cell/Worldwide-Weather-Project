@@ -24,59 +24,49 @@ def get_city():
     if len(city)==0:
         print("City name must contains chars. ")
         exit()
-    else:
+    if city.isalpha():
         return city
+    else:
+        print("Name city can not contains nums!")
+        exit()
 
 def get_country_code():
 
     country = input("Enter country code (For example Israel: IL): ")
     country = country.lower().strip()
-    if len(country)==2:
+    if len(country)==2 and country.isalpha():
         return country
     else:
         print("Country code must contains exactly 2 letters. ")
         exit()
 
-def is_usa(country):
-    if country == "US":
-        return True
+def get_us_code():
 
-def get_us_code(country):
-    
     state = input("Enter state code: (For example Texas: TX) ")
     state = state.lower().strip()
-    if len(state)==2:
+    if len(state) == 2 and state.isalpha():
         return state
     else:
         print("State code must contains exactly 2 letters. ")
         exit()
 
-def get_location(country_code, state_code, city_name, key, limit=1):
+def get_location(country_code, city_name, key, limit=1):
  
     base_uml = f"http://api.openweathermap.org/geo/1.0/direct"
+
+    if country_code == "US":
+        state_code = get_us_code()
+    else:
+        state_code = ""
     
-    
-    try:
-        start_time = time.time()
+    response = requests.get(f"{base_uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
+    coordinates = response.json()
 
-        if is_usa(country_code):
-            
-            response = requests.get(f"{base_uml}?q={city_name},{state_code},{country_code}&limit={limit}&appid={key}")
-        else:
-            response = requests.get(f"{base_uml}?q={city_name},{country_code}&limit={limit}&appid={key}")
-
-        corrent_time = time.time()
-
-        if corrent_time - start_time < 30:
-            coordinates = response.json()
-            return coordinates
-        else: 
-            print("TIme over!")
-            exit()
-
-    except:
+    if len(coordinates)==0:
         print("Location not found!")
         exit()
+    else:
+        return coordinates
 
 def get_weather(latitude, longitude, key):
 
@@ -118,6 +108,9 @@ def save_weather_to_csv(weather_result):
         if os.path.getsize("weather_history.csv") ==0:
             writer.writeheader()
         writer.writerow(weather_result)
+        print("Weather result saved to weather_history.csv")
+        return True
+    
 
 
 
